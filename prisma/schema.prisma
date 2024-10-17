@@ -14,13 +14,13 @@ datasource db {
 }
 
 model Produto {
-  id        String         @id @default(uuid())
-  name      String
-  price     Decimal        @db.Decimal(10, 2)
-  stock     Int
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  vendas    VendaProduto[]
+  id           String         @id @default(uuid())
+  name         String
+  price        Decimal        @db.Decimal(10, 2)
+  stock        Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  vendaProduto VendaProduto[]
 }
 
 model Venda {
@@ -28,15 +28,15 @@ model Venda {
   date      DateTime
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  produtos  VendaProduto[]
+  produto   VendaProduto[]
 }
 
 model VendaProduto {
   id        String   @id @default(uuid())
-  vendaId   String
-  venda     Venda    @relation(fields: [vendaId], references: [id])
-  produtoId String
-  produto   Produto  @relation(fields: [produtoId], references: [id])
+  idVenda   String
+  venda     Venda    @relation(fields: [idVenda], references: [id])
+  idProduto String
+  produto   Produto  @relation(fields: [idProduto], references: [id])
   unitPrice Decimal  @db.Decimal(10, 2)
   quantity  Int
   createdAt DateTime @default(now())

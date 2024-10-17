@@ -5,7 +5,12 @@ import { PlusIcon } from "lucide-react";
 import { columns } from "./__components/Table-Coluns";
 
 const Produtos = async () => {
+  // data accsses
   const produtos = await getProduto();
+  // const response = await fetch("http://localhost:3000/api/produtos",{
+  // method: get,
+  // cache: 'no-cache'}); //router handles
+  // const produtos = await response.json();
 
   return (
     <div className="mx-8 w-full space-y-8 rounded-xl bg-white p-4">
@@ -24,7 +29,10 @@ const Produtos = async () => {
         </Button>
       </div>
 
-      <DataTable columns={columns} data={produtos} />
+      <DataTable
+        columns={columns}
+        data={JSON.parse(JSON.stringify(produtos))} // somente desta forma é possivel passar class, jsx...
+      />
     </div>
   );
 };

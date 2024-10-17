@@ -23,8 +23,8 @@ CREATE TABLE "Venda" (
 -- CreateTable
 CREATE TABLE "VendaProduto" (
     "id" TEXT NOT NULL,
-    "vendaId" TEXT NOT NULL,
-    "produtoId" TEXT NOT NULL,
+    "idVenda" TEXT NOT NULL,
+    "idProduto" TEXT NOT NULL,
     "unitPrice" DECIMAL(10,2) NOT NULL,
     "quantity" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +34,7 @@ CREATE TABLE "VendaProduto" (
 );
 
 -- AddForeignKey
-ALTER TABLE "VendaProduto" ADD CONSTRAINT "VendaProduto_vendaId_fkey" FOREIGN KEY ("vendaId") REFERENCES "Venda"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "VendaProduto" ADD CONSTRAINT "VendaProduto_idVenda_fkey" FOREIGN KEY ("idVenda") REFERENCES "Venda"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VendaProduto" ADD CONSTRAINT "VendaProduto_produtoId_fkey" FOREIGN KEY ("produtoId") REFERENCES "Produto"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "VendaProduto" ADD CONSTRAINT "VendaProduto_idProduto_fkey" FOREIGN KEY ("idProduto") REFERENCES "Produto"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
