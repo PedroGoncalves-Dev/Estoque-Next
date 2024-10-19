@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -23,21 +24,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { z } from "zod";
+import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { format } from "path";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
     message: "O nome do produto é obrigatorio",
   }),
-  price: z.number().min(0.01, {
-    message: "O preço do produto é obrigátorio",
-  }),
-  stock: z.number().int().min(0, {
-    message: "A quantidade de estoque é obrigátorio",
-  }),
+  price: z.coerce
+    .number()
+    .positive({
+      message: "A quantidade dese ser positiva",
+    })
+    .min(0.01, {
+      message: "O preço do produto é obrigátorio",
+    }),
+  stock: z.coerce
+    .number()
+    .positive({
+      message: "A quantidade de estoque deve ser positiva",
+    })
+    .int()
+    .min(0, {
+      message: "A quantidade de estoque é obrigátorio",
+    }),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -45,7 +56,7 @@ type FormSchema = z.infer<typeof formSchema>;
 const AddProductButton = () => {
   const form = useForm<FormSchema>({
     shouldUnregister: true, //faz com que o form seja resetado
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema), //pego a validação do zood
     defaultValues: {
       name: "",
       price: 0,
@@ -104,7 +115,20 @@ const AddProductButton = () => {
                   <FormItem>
                     <FormLabel>Preço</FormLabel>
                     <FormControl>
-                      <Input placeholder="" {...field} />
+                      <NumericFormat
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        fixedDecimalScale
+                        decimalScale={2}
+                        prefix="R$"
+                        allowNegative={false}
+                        customInput={Input}
+                        onValueChange={(value) =>
+                          field.onChange(value.floatValue)
+                        }
+                        {...field}
+                        onChange={() => {}}
+                      />
                     </FormControl>
                     <FormDescription>
                       This is your public display name.
