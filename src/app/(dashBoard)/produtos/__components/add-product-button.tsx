@@ -22,11 +22,13 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
 import { z } from "zod";
 import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { createProduct } from "@/actions/produto/add-produto";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -54,6 +56,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 const AddProductButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const form = useForm<FormSchema>({
     shouldUnregister: true, //faz com que o form seja resetado
     resolver: zodResolver(formSchema), //pego a validação do zood
@@ -64,12 +68,18 @@ const AddProductButton = () => {
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
-    console.log(data);
+  const onSubmit = async (data: FormSchema) => {
+    try {
+      await createProduct(data);
+
+      setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button className="gap-2">
             <PlusIcon size={20} />
@@ -161,7 +171,16 @@ const AddProductButton = () => {
                     Cancelar
                   </Button>
                 </DialogClose>
-                <Button type="submit">Submit</Button>
+                <Button
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                  className="gap-2"
+                >
+                  {form.formState.isSubmitting && (
+                    <Loader2Icon className="animate-spin" size={16} />
+                  )}
+                  Submit
+                </Button>
               </DialogFooter>
             </form>
           </Form>
