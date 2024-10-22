@@ -1,4 +1,5 @@
 "server-only";
+// requisições seguras do lado do servidor, usado com dados sensiveis
 import { db } from "@/lib/prisma";
 import { Produto } from "@prisma/client";
 
