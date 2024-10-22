@@ -23,44 +23,23 @@ import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
 import { Loader2Icon, PlusIcon } from "lucide-react";
-import { z } from "zod";
+
 import { NumericFormat } from "react-number-format";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+  createProductSchema,
+  CreateProductSchema,
+} from "@/actions/produto/create-product/schema";
 import { createProduct } from "@/actions/produto/add-produto";
 import { useState } from "react";
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: "O nome do produto é obrigatorio",
-  }),
-  price: z.coerce
-    .number()
-    .positive({
-      message: "A quantidade dese ser positiva",
-    })
-    .min(0.01, {
-      message: "O preço do produto é obrigátorio",
-    }),
-  stock: z.coerce
-    .number()
-    .positive({
-      message: "A quantidade de estoque deve ser positiva",
-    })
-    .int()
-    .min(0, {
-      message: "A quantidade de estoque é obrigátorio",
-    }),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
-
-const AddProductButton = () => {
+const CreateProductButton = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const form = useForm<FormSchema>({
+  const form = useForm<CreateProductSchema>({
     shouldUnregister: true, //faz com que o form seja resetado
-    resolver: zodResolver(formSchema), //pego a validação do zood
+    resolver: zodResolver(createProductSchema), //pego a validação do zood
     defaultValues: {
       name: "",
       price: 0,
@@ -68,7 +47,7 @@ const AddProductButton = () => {
     },
   });
 
-  const onSubmit = async (data: FormSchema) => {
+  const onSubmit = async (data: CreateProductSchema) => {
     try {
       await createProduct(data);
 
@@ -190,4 +169,4 @@ const AddProductButton = () => {
   );
 };
 
-export default AddProductButton;
+export default CreateProductButton;
