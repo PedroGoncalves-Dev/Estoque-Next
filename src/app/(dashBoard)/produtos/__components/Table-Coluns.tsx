@@ -19,6 +19,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import AlertDialogDelete from "./delete-dialog";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -70,34 +82,40 @@ export const columns: ColumnDef<Produto>[] = [
     cell: (row) => {
       const product = row.row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="outline-none">
-              <MoreHorizontalIcon size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="cursor-pointer gap-1.5"
-              onClick={() => navigator.clipboard.writeText(product.id)}
-            >
-              <ClipboardCopyIcon size={16} />
-              Copiar ID
-            </DropdownMenuItem>
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"} className="outline-none">
+                <MoreHorizontalIcon size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer gap-1.5"
+                onClick={() => navigator.clipboard.writeText(product.id)}
+              >
+                <ClipboardCopyIcon size={16} />
+                Copiar ID
+              </DropdownMenuItem>
 
-            <DropdownMenuItem className="cursor-pointer gap-1.5">
-              <EditIcon size={16} />
-              Editar
-            </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer gap-1.5">
+                <EditIcon size={16} />
+                Editar
+              </DropdownMenuItem>
 
-            <DropdownMenuItem className="cursor-pointer gap-1.5">
-              <DeleteIcon size={16} />
-              Deletar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="cursor-pointer gap-1.5">
+                  <DeleteIcon size={16} />
+                  Deletar
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* content alertDialog fora do dropDown menu */}
+          <AlertDialogDelete id={product.id} />
+        </AlertDialog>
       );
     },
   },
