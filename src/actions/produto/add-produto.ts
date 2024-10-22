@@ -1,19 +1,16 @@
 "use server";
 
+// o correto é apenas exportar a funcao que a action function de um use server
+
 import { db } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { CreateProductSchema } from "./create-product/schema";
 
-interface Iprops {
-  name: string;
-  price: number;
-  stock: number;
-}
-
-export const createProduct = async ({ name, price, stock }: Iprops) => {
+export const createProduct = async (data: CreateProductSchema) => {
   await db.produto.create({
-    data: {
-      name,
-      price,
-      stock,
-    },
+    data,
   });
+
+  //revalida a pagina
+  revalidatePath("/produtos");
 };
