@@ -2,7 +2,7 @@ import { DataTable } from "@/components/ui/date-table";
 import { getProduto } from "@/data-access/produto/getProduto";
 
 import { columns } from "./__components/Table-Coluns";
-import AddProductButton from "./__components/add-product-button";
+import CreateProductButton from "./__components/create-product-button";
 
 const Produtos = async () => {
   // data accsses
@@ -22,7 +22,7 @@ const Produtos = async () => {
 
           <h2 className="text-xl font-semibold">Produtos</h2>
         </div>
-        <AddProductButton />
+        <CreateProductButton />
       </div>
 
       <DataTable
