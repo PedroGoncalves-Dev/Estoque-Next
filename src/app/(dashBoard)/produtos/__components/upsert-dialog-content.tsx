@@ -1,10 +1,7 @@
 "use client";
 
-import { createProduct } from "@/actions/produto/add-produto";
-import {
-  createProductSchema,
-  CreateProductSchema,
-} from "@/actions/produto/create-product/schema";
+import { upsertProduct } from "@/actions/produto/upsertProduct";
+import { UpsertProductSchema } from "@/actions/produto/upsertProduct/schema";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import {
@@ -24,23 +21,24 @@ import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 
 interface Iprops {
+  defaultValues?: UpsertProductSchema;
   onSuccess?: () => void;
 }
 
-const UpsertProductDialogContent = ({ onSuccess }: Iprops) => {
-  const form = useForm<CreateProductSchema>({
+const UpsertProductDialogContent = ({ onSuccess, defaultValues }: Iprops) => {
+  const form = useForm<UpsertProductSchema>({
     shouldUnregister: true, //faz com que o form seja resetado
-    resolver: zodResolver(createProductSchema), //pego a validação do zood
-    defaultValues: {
+    resolver: zodResolver(UpsertProductSchema), //pego a validação do zood
+    defaultValues: defaultValues ?? {
       name: "",
       price: 0,
       stock: 1,
     },
   });
 
-  const onSubmit = async (data: CreateProductSchema) => {
+  const onSubmit = async (data: UpsertProductSchema) => {
     try {
-      await createProduct(data);
+      await upsertProduct({ ...data, id: defaultValues?.id }); // concatena os inputs e passa o valor do id default
       onSuccess?.();
     } catch (error) {
       console.log(error);
