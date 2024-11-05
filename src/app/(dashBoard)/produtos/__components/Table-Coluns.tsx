@@ -13,8 +13,6 @@ import {
 
 import AlertDialogDelete from "./delete-dialog";
 
-import UpsertProductDialogContent from "./upsert-dialog-content";
-import { useState } from "react";
 import ProductTableDropdownMenu from "./table-Dropdown-menu";
 
 // This type is used to define the shape of our data.
