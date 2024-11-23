@@ -37,6 +37,8 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import SalesTableDropDownMenu from "./table-dropdown-menu";
+
 const formSchema = z.object({
   productId: z.string().uuid({
     message: "O produto é obrigátorio",
@@ -116,6 +118,13 @@ const UpsertSheetContent = ({
       return acc + product.price * product.quantity;
     }, 0);
   }, [selectedProducts]);
+
+  const onDelete = (productid: string) => {
+    setSelectedProducts((currentProduct) => {
+      return currentProduct.filter((product) => product.id !== productid);
+    });
+  };
+
   return (
     <SheetContent className="!max-w-[700px]">
       <SheetHeader>
@@ -176,6 +185,7 @@ const UpsertSheetContent = ({
             <TableHead>Preço unitário</TableHead>
             <TableHead>Quantidade</TableHead>
             <TableHead>Total</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -186,6 +196,9 @@ const UpsertSheetContent = ({
               <TableCell>{product.quantity}</TableCell>
               <TableCell>
                 {formatCurrency(product.price * product.quantity)}
+              </TableCell>
+              <TableCell>
+                <SalesTableDropDownMenu product={product} onDelete={onDelete} />
               </TableCell>
             </TableRow>
           ))}
