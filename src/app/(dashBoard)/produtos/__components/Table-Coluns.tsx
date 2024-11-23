@@ -3,27 +3,19 @@
 import { Badge } from "@/components/ui/badge";
 import { Produto } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  CircleIcon,
-  ClipboardCopyIcon,
-  DeleteIcon,
-  EditIcon,
-  MoreHorizontalIcon,
-} from "lucide-react";
-
-import AlertDialogDelete from "./delete-dialog";
+import { CircleIcon } from "lucide-react";
 
 import ProductTableDropdownMenu from "./table-Dropdown-menu";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-const getStatusLabel = (status: string) => {
-  if (status == "IN_STOCK") {
-    return "Em estoque";
-  } else {
-    return "Sem estoque";
-  }
-};
+// const getStatusLabel = (status: string) => {
+//   if (status == "IN_STOCK") {
+//     return "Em estoque";
+//   } else {
+//     return "Sem estoque";
+//   }
+// };
 
 export const columns: ColumnDef<Produto>[] = [
   {
@@ -50,17 +42,15 @@ export const columns: ColumnDef<Produto>[] = [
     header: "Status",
     cell: (row) => {
       const produto = row.row.original;
-      const label = getStatusLabel(produto.status);
+
+      const labelStock = produto.stock > 0;
       return (
-        <Badge
-          variant={label === "Em estoque" ? "default" : "outline"}
-          className="gap-1.5"
-        >
+        <Badge variant={labelStock ? "default" : "outline"} className="gap-1.5">
           <CircleIcon
             size={14}
-            className={`${label === "Em estoque" ? "fill-primary-foreground" : "fill-destructive-foreground"} `}
+            className={`${labelStock ? "fill-primary-foreground" : "fill-destructive-foreground"} `}
           />
-          {label}
+          {labelStock ? "Em estoque" : "Sem estoque"}
         </Badge>
       );
     },
